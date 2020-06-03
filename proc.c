@@ -532,3 +532,8 @@ procdump(void)
     cprintf("\n");
   }
 }
+// function for running and runable
+int sys_info_proc(void)
+{
+  
+}
