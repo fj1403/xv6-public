@@ -539,11 +539,36 @@ int sys_info_proc(void)
     struct proc_info * processes;
     argptr(0,(void*)&processes, sizeof(processes));
     int n=0;
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+     {
         if(p->state == RUNNABLE)
-          processes[n].pid=p->pid;
-        else if (p->state == RUNNING)
-          processes[n].memsize=p->size;
+        {
+           processes[n].pid=p->pid;
+          processes[n].memsize=p->sz;
           n++;
         }
+         
+        else if (p->state == RUNNING)
+        {
+          processes[n].pid=p->pid;
+          processes[n].memsize=p->sz;
+          n++;
+        }
+            
+      }
+    struct proc_info sort;
+    for(int i=0;i<n;i++){
+        int tmp=0;
+        sort.memsize=-1;
+        sort.pid=0;
+        for(int j=0;j<n-i;j++){
+            if(processes[j].memsize>sort.memsize) {
+                sort = processes[j];
+                tmp=j;
+            }
+        }
+        processes[tmp]=processes[n-i-1];
+        processes[n-i-1]=sort;
+    }
+  return 0;
 }

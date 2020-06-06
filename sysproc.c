@@ -92,5 +92,5 @@ sys_uptime(void)
 int
 sys_info_proc(void)
 {
-  return info_proc();
+  return sys_info_proc();
 }
