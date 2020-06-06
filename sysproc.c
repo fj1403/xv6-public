@@ -89,12 +89,3 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
-<<<<<<< HEAD
-
-=======
-int
-sys_info_proc(void)
-{
-  return sys_info_proc();
-}
->>>>>>> e521675e2932041ba64e443e2ea2ea224090d3e6

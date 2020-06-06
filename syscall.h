@@ -20,8 +20,5 @@
 #define SYS_link   19
 #define SYS_mkdir  20
 #define SYS_close  21
-<<<<<<< HEAD
 #define SYS_new_sys 22
-=======
-#define SYS_info_proc  22
->>>>>>> e521675e2932041ba64e443e2ea2ea224090d3e6
+

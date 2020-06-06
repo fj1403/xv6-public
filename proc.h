@@ -60,12 +60,4 @@ struct proc {
 //   text
 //   original data and bss
 //   fixed-size stack
-<<<<<<< HEAD
-//   expandable heap
-=======
-//   expandable heap
-struct proc_info {
-    int pid;
-    int memsize;
-};
->>>>>>> e521675e2932041ba64e443e2ea2ea224090d3e6
+
