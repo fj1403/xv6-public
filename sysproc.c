@@ -89,8 +89,4 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
-int
-sys_info_proc(void)
-{
-  return info_proc();
-}
+

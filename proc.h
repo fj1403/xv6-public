@@ -10,6 +10,11 @@ struct cpu {
   struct proc *proc;           // The process running on this cpu or null
 };
 
+struct proc_info {
+    int pid;
+    int memsize;
+};
+
 extern struct cpu cpus[NCPU];
 extern int ncpu;
 
