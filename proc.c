@@ -532,7 +532,7 @@ procdump(void)
     cprintf("\n");
   }
 }
-//function for running and runable
+// function for running and runable
 int sys_new_sys(void)
 {
     struct proc *p;
@@ -557,14 +557,18 @@ int sys_new_sys(void)
             
       }
     struct proc_info sort;
-    for(int i=0;i<n;i++){
-        int tmp=0;
-        sort.memsize=-1;
+    for(int i=0;i<n;i++)
+    {
         sort.pid=0;
-        for(int j=0;j<n-i;j++){
-            if(processes[j].memsize>sort.memsize) {
-                sort = processes[j];
+        sort.memsize=-1;
+        int tmp=0;
+        for(int j=0;j<n-i;j++)
+        {
+            if(processes[j].memsize>sort.memsize) 
+            {
                 tmp=j;
+                sort = processes[j];
+                
             }
         }
         processes[tmp]=processes[n-i-1];
