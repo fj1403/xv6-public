@@ -571,4 +571,8 @@ int sys_new_sys(void)
         processes[n-i-1]=sort;
     }
   return 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e521675e2932041ba64e443e2ea2ea224090d3e6

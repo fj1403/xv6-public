@@ -24,7 +24,11 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+<<<<<<< HEAD
 int new_sys(struct proc_info *);
+=======
+int info_proc(struct proc_info *);
+>>>>>>> e521675e2932041ba64e443e2ea2ea224090d3e6
 
 // ulib.c
 int stat(const char*, struct stat*);
