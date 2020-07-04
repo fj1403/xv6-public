@@ -21,4 +21,6 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_new_sys 22
+#define SYS_waitx  23
+
 
