@@ -18,7 +18,6 @@ void
 tvinit(void)
 {
   int i;
-
   for(i = 0; i < 256; i++)
     SETGATE(idt[i], 0, SEG_KCODE<<3, vectors[i], 0);
   SETGATE(idt[T_SYSCALL], 1, SEG_KCODE<<3, vectors[T_SYSCALL], DPL_USER);
@@ -53,7 +52,18 @@ trap(struct trapframe *tf)
       ticks++;
       wakeup(&ticks);
       release(&tickslock);
-    }
+//count i/o time and runtime
+      if (myproc()) 
+      {
+        if(myproc()->state == RUNNING)
+          myproc()->rtime++;
+        else if (myproc()->state == SLEEPING)
+        {
+          myproc()->iotime++;
+        }
+
+      }
+
     lapiceoi();
     break;
   case T_IRQ0 + IRQ_IDE:
@@ -109,4 +119,5 @@ trap(struct trapframe *tf)
   // Check if the process has been killed since we yielded
   if(myproc() && myproc()->killed && (tf->cs&3) == DPL_USER)
     exit();
+}
 }
