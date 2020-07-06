@@ -112,6 +112,12 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
+    //adding parameters for initialize
+  p->stime = ticks;
+  p->etime = 0;
+  p->rtime = 0;
+  p->iotime = 0;
+
   return p;
 }
 
@@ -260,6 +266,9 @@ exit(void)
         wakeup1(initproc);
     }
   }
+    // finish time
+  curproc->etime = ticks;
+
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
@@ -311,6 +320,48 @@ wait(void)
   }
 }
 
+int
+waitx(int *wtime, int *rtime)
+{
+  struct proc *process;
+  int havekids, pid;
+  struct  proc *curproc = myproc();
+  acquire(&ptable.lock);
+ for(;;)
+  {
+    havekids = 0;
+    for (process=ptable.proc; process < &ptable.proc[NPROC]; process++)
+    {
+      if(process->parent != curproc)
+        continue;
+      havekids = 1;
+      if (process->state == ZOMBIE)
+      {
+        // Found child
+        *wtime = process->etime - process->stime - process->rtime - process->iotime;
+        *rtime = process->rtime;
+        pid = process->pid;
+        kfree(process->kstack);
+        process->kstack = 0;
+        freevm(process->pgdir);
+        process->state = UNUSED;
+        process->pid = 0;
+        process->parent = 0;
+        process->name[0] = 0;
+        process->killed = 0;
+        release(&ptable.lock);
+        return pid;
+      }  
+    }
+    if (havekids == 0 || curproc->killed == 1){
+      release(&ptable.lock);
+      return -1;
+    }
+  
+    sleep(curproc, &ptable.lock);  // sleep for children to exit
+  }
+
+}
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
