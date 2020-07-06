@@ -117,6 +117,7 @@ found:
   p->etime = 0;
   p->rtime = 0;
   p->iotime = 0;
+  p->priority = 60; //initialize defult priority
 
   return p;
 }
@@ -373,7 +374,7 @@ waitx(int *wtime, int *rtime)
 void
 scheduler(void)
 {
-  struct proc *p;
+  struct proc *p , *temp;
   struct cpu *c = mycpu();
   c->proc = 0;
   
@@ -382,10 +383,22 @@ scheduler(void)
     sti();
 
     // Loop over process table looking for process to run.
+    struct proc *HP; //store high priority
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
+
+      //priority scheduling
+      HP = p;
+      for (temp = ptable.proc; temp < &ptable.proc[NPROC]; temp++)
+      {
+        if (temp->state != RUNNABLE)
+          continue;
+        if(HP->priority > temp->priority)
+          HP = temp;  
+      }
+      p = HP; //HP process
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
@@ -583,6 +596,25 @@ procdump(void)
     cprintf("\n");
   }
 }
+int
+set_priority(int pid, int value)
+{
+  struct proc *p;
+  acquire(&ptable.lock);
+  int old_priority = -1;
+  for (p  = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if (p->pid == pid)
+    {
+      old_priority = p->priority;
+      p->priority = value;
+      break;
+    }
+  }
+  release(&ptable.lock);
+  return old_priority;
+}
+
 // function for running and runable
 int sys_new_sys(void)
 {
