@@ -110,3 +110,17 @@ sys_uptime(void)
 // {
 //   return sys_info_proc();
 // }
+
+//this funct have priority value
+int
+sys_set_priority(void)
+{
+  int pid, value;
+  //get from user mode function
+  if(argint(1,&value) < 0)
+    return -1;
+  if(argint(0, &pid) < 0)
+    return -1;
+
+  return set_priority(pid, value);    
+} 
