@@ -26,6 +26,22 @@ sys_wait(void)
   return wait();
 }
 
+//get argument from user mode
+int 
+sys_waitx(void)
+{
+  int *wtime;
+  int *rtime;
+  
+  if(argptr(0, (char**)&wtime, sizeof(int)) < 0)
+    return -1;
+
+  if(argptr(1, (char**)&rtime, sizeof(int)) < 0)
+    return -1;
+
+  return waitx(wtime, rtime);
+}
+
 int
 sys_kill(void)
 {
@@ -89,3 +105,8 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+// int
+// sys_info_proc(void)
+// {
+//   return sys_info_proc();
+// }
