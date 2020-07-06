@@ -22,5 +22,6 @@
 #define SYS_close  21
 #define SYS_new_sys 22
 #define SYS_waitx  23
+#define SYS_set_priority 24
 
 
